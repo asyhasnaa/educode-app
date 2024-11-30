@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "423346607041",
+    "project_id": "educode-app-6729f",
+    "storage_bucket": "educode-app-6729f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423346607041:android:1be2d3983e404a36d5d540",
+        "android_client_info": {
+          "package_name": "com.application.educode"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRc_niOtV-WN7Fi1AkDR9B5IGI7uPgTbA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

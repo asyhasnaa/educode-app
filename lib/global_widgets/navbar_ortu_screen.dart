@@ -2,6 +2,7 @@
 
 import 'package:educode/utils/constants/color_constant.dart';
 import 'package:educode/utils/constants/icons..dart';
+import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view/bill/screen/bill_screen.dart';
 import 'package:educode/view/report/grade_report_screen.dart';
 import 'package:educode/view/home/screen/home_screen.dart';
@@ -21,8 +22,8 @@ class _NavBarOrtuScreenState extends State<NavBarOrtuScreen> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
-    const GradeReportScreen(),
-    const TagihanPembayaranScreen(),
+    GradeReportScreen(),
+    const InvoiceListPage(),
     const ProfileScreen(),
   ];
 
@@ -37,11 +38,12 @@ class _NavBarOrtuScreenState extends State<NavBarOrtuScreen> {
         enableFeedback: true,
         selectedItemColor: ColorsConstant.primary300,
         showUnselectedLabels: true,
-        selectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w700,
+        selectedLabelStyle: TextStylesConstant.nunitoButtonBold,
+        unselectedLabelStyle: TextStylesConstant.nunitoButtonBold.copyWith(
+          color: ColorsConstant.neutral200,
         ),
-        backgroundColor: ColorsConstant.neutral100,
-        unselectedItemColor: ColorsConstant.neutral700,
+        backgroundColor: ColorsConstant.neutral50,
+        unselectedItemColor: ColorsConstant.primary200,
         elevation: 0,
         items: [
           BottomNavigationBarItem(
@@ -51,7 +53,9 @@ class _NavBarOrtuScreenState extends State<NavBarOrtuScreen> {
                 _selectedIndex == 0
                     ? IconsConstant.homeNavOn
                     : IconsConstant.homeNavOff,
-                color: ColorsConstant.primary300,
+                color: _selectedIndex == 0
+                    ? ColorsConstant.primary300
+                    : ColorsConstant.primary200,
               ),
             ),
             label: 'Beranda',
@@ -63,7 +67,9 @@ class _NavBarOrtuScreenState extends State<NavBarOrtuScreen> {
                 _selectedIndex == 1
                     ? IconsConstant.reportNavOn
                     : IconsConstant.reportNavOff,
-                color: ColorsConstant.primary300,
+                color: _selectedIndex == 1
+                    ? ColorsConstant.primary300
+                    : ColorsConstant.primary200,
               ),
             ),
             label: 'Laporan',
@@ -75,7 +81,9 @@ class _NavBarOrtuScreenState extends State<NavBarOrtuScreen> {
                 _selectedIndex == 2
                     ? IconsConstant.billNavOn
                     : IconsConstant.billNavOff,
-                color: ColorsConstant.primary300,
+                color: _selectedIndex == 2
+                    ? ColorsConstant.primary300
+                    : ColorsConstant.primary200,
               ),
             ),
             label: 'Tagihan',
@@ -87,7 +95,9 @@ class _NavBarOrtuScreenState extends State<NavBarOrtuScreen> {
                 _selectedIndex == 3
                     ? IconsConstant.profileNavOn
                     : IconsConstant.profileNavOff,
-                color: ColorsConstant.primary300,
+                color: _selectedIndex == 3
+                    ? ColorsConstant.primary300
+                    : ColorsConstant.primary200,
               ),
             ),
             label: 'Profile',

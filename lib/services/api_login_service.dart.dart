@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ApiAuthService {
+  //PARENT LOGIN TO APP
   Future<LoginResponse?> loginApp(String username, String password) async {
     String? existingToken = await getToken();
     if (existingToken != null) {
@@ -51,14 +52,14 @@ class ApiAuthService {
 
     final responseInfo = await http.post(
       Uri.parse(
-          'https://lms.educode.id/webservice/rest/server.php?wstoken=$token&moodlewsrestformat=json&wsfunction=${ApiRoutes.userId}'),
+          '${ApiRoutes.baseFunctionUrl}wstoken=$token&moodlewsrestformat=json&wsfunction=${ApiRoutes.userId}'),
     );
 
     if (responseInfo.statusCode == 200) {
       final data = jsonDecode(responseInfo.body);
+      print("User info response data: $data");
 
       if (data.containsKey('userid')) {
-        // Construct the SiteInfoResponse object from the JSON data
         return SiteInfoResponse.fromJson(data);
       } else {
         // Handle the case where 'userid' is not present in the response
@@ -73,8 +74,7 @@ class ApiAuthService {
   Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
-    print(
-        "Token disimpan ke Shared Preferences: $token"); // Logging saat menyimpan
+    print("Token disimpan ke Shared Preferences: $token");
   }
 
 // Mendapatkan token dari shared preferences
@@ -82,8 +82,7 @@ class ApiAuthService {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
     if (token != null) {
-      print(
-          "Token diambil dari Shared Preferences: $token"); // Logging saat mengambil
+      print("Token diambil dari Shared Preferences: $token");
     } else {
       print("Tidak ada token di Shared Preferences.");
     }
@@ -94,6 +93,7 @@ class ApiAuthService {
   Future<void> saveUserId(int userId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('userId', userId);
+    print("UserID disimpan ke Shared Preferences: $userId");
   }
 
   // Mendapatkan user ID dari shared preferences

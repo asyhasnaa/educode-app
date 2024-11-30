@@ -1,10 +1,10 @@
-class GradeItem {
+class GradeReportResponse {
   final String? itemName;
   final String? gradeFormatted;
   final String? feedback;
   final int? gradedategraded; // Menambahkan parameter gradedategraded
 
-  GradeItem({
+  GradeReportResponse({
     required this.itemName,
     required this.gradeFormatted,
     required this.feedback,
@@ -12,8 +12,8 @@ class GradeItem {
   });
 
   // Factory method untuk parsing JSON
-  factory GradeItem.fromJson(Map<String, dynamic> json) {
-    return GradeItem(
+  factory GradeReportResponse.fromJson(Map<String, dynamic> json) {
+    return GradeReportResponse(
       itemName: json['itemname'] as String?,
       gradeFormatted: json['gradeformatted'] as String?,
       feedback: json['feedback'] as String?,
@@ -24,7 +24,7 @@ class GradeItem {
 }
 
 class UserGrades {
-  final List<GradeItem> gradeItems;
+  final List<GradeReportResponse> gradeItems;
 
   UserGrades({
     required this.gradeItems,
@@ -32,8 +32,9 @@ class UserGrades {
 
   factory UserGrades.fromJson(Map<String, dynamic> json) {
     var gradeItemsJson = json['gradeitems'] as List;
-    List<GradeItem> gradeItemsList =
-        gradeItemsJson.map((item) => GradeItem.fromJson(item)).toList();
+    List<GradeReportResponse> gradeItemsList = gradeItemsJson
+        .map((item) => GradeReportResponse.fromJson(item))
+        .toList();
 
     return UserGrades(
       gradeItems: gradeItemsList,

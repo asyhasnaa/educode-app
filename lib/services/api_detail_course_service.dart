@@ -12,7 +12,7 @@ class ApiDetailCourseService {
     if (token == null) return null;
 
     final response = await http.get(Uri.parse(
-        '${ApiRoutes.baseFunctionUrl}wstoken=$token&moodlewsrestformat=json&wsfunction=core_course_get_contents&courseid=$courseId'));
+        '${ApiRoutes.baseFunctionUrl}wstoken=${ApiRoutes.wstoken}&moodlewsrestformat=json&wsfunction=${ApiRoutes.getDetailCourse}&courseid=$courseId'));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);

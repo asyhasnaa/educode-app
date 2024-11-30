@@ -4,7 +4,7 @@ import 'package:educode/utils/constants/color_constant.dart';
 import 'package:educode/utils/constants/icons..dart';
 
 import 'package:educode/utils/constants/text_styles_constant.dart';
-import 'package:educode/view_model/login_controller.dart';
+import 'package:educode/view_model/authentication/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,16 +17,17 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: ColorsConstant.neutral50,
         body: SingleChildScrollView(
           child: Center(
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
                   child: Center(
                       child: Image.asset(
-                    "assets/images/educode_login.png",
-                    width: 200,
+                    "assets/images/onboarding1.png",
+                    width: 250,
                   )),
                 ),
                 Container(
@@ -37,15 +38,12 @@ class LoginScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Masuk',
-                        style: TextStylesConstant.nunitoHeading3,
+                        style: TextStylesConstant.nunitoHeading24,
                       ),
                       const SizedBox(height: 10),
-                      const Text(
+                      Text(
                         'Email/Username',
-                        style: TextStyle(
-                          color: ColorsConstant.neutral800,
-                          fontSize: 14,
-                        ),
+                        style: TextStylesConstant.nunitoCaption16,
                       ),
                       const SizedBox(height: 8),
                       Obx(
@@ -61,12 +59,9 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 18),
-                      const Text(
+                      Text(
                         'Kata Sandi',
-                        style: TextStyle(
-                          color: ColorsConstant.neutral800,
-                          fontSize: 14,
-                        ),
+                        style: TextStylesConstant.nunitoCaption16,
                       ),
                       const SizedBox(height: 8),
                       Obx(
@@ -86,12 +81,9 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 18),
-                      const Text(
+                      Text(
                         'Masuk Sebagai',
-                        style: TextStyle(
-                          color: ColorsConstant.neutral800,
-                          fontSize: 14,
-                        ),
+                        style: TextStylesConstant.nunitoCaption16,
                       ),
                       const SizedBox(height: 8),
                       Obx(() => Container(
@@ -111,7 +103,7 @@ class LoginScreen extends StatelessWidget {
                                     : null,
                                 hint: Text(
                                   'Pilih Peran Anda',
-                                  style: TextStylesConstant.nunitoCaption
+                                  style: TextStylesConstant.nunitoCaption16
                                       .copyWith(
                                           color: ColorsConstant.neutral500),
                                 ),
@@ -125,7 +117,7 @@ class LoginScreen extends StatelessWidget {
                                     value: value,
                                     child: Text(
                                       value,
-                                      style: TextStylesConstant.nunitoCaption,
+                                      style: TextStylesConstant.nunitoCaption16,
                                     ),
                                   );
                                 }).toList(),

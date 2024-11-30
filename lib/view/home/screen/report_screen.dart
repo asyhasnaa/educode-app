@@ -1,5 +1,5 @@
-import 'package:educode/view_model/course_controller.dart';
-import 'package:educode/view_model/login_controller.dart';
+import 'package:educode/view_model/course/course_controller.dart';
+import 'package:educode/view_model/authentication/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

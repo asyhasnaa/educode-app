@@ -1,31 +1,21 @@
 import 'dart:convert';
 
 import 'package:educode/models/api_response/grade_item_model.dart';
-import 'package:educode/services/api_login_service.dart.dart';
 import 'package:http/http.dart' as http;
 
-class ApiGradeItemService {
-  Future<UserGrades?> getUserGrades(int courseId) async {
-    final ApiAuthService loginService = ApiAuthService();
-
-    final token = await loginService.getToken();
-    final userid = await loginService.getUserIdFromPrefs();
-    if (token == null || userid == null) {
-      throw Exception('Token or User ID is null');
-    }
-
+class ApiGradeReportService {
+  Future<UserGrades> getUserGradesForCourse(int courseId, int userId) async {
     final response = await http.get(
       Uri.parse(
-          'https://lms.educode.id/webservice/rest/server.php?wstoken=$token&moodlewsrestformat=json&wsfunction=gradereport_user_get_grade_items&courseid=$courseId&userid=$userid'),
+          'https://lms.educode.id/webservice/rest/server.php?wstoken=eb60c3bda800422e20df49087f462e81&moodlewsrestformat=json&wsfunction=gradereport_user_get_grade_items&courseid=$courseId&userid=$userId'),
     );
 
     if (response.statusCode == 200) {
       Map<String, dynamic> json = jsonDecode(response.body);
-      var userGradesJson =
-          json['usergrades'][0]; // Mengakses objek 'usergrades'
-      return UserGrades.fromJson(userGradesJson); // Parsing menggunakan model
+      var userGradesJson = json['usergrades'][0];
+      return UserGrades.fromJson(userGradesJson);
     } else {
-      throw Exception('Failed to load grades');
+      throw Exception('Failed to load grades for course $courseId');
     }
   }
 }

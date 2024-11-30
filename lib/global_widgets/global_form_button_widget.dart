@@ -48,7 +48,7 @@ class GlobalFormButtonWidget extends StatelessWidget {
               )
             : Text(
                 text,
-                style: TextStylesConstant.nunitoCaption.copyWith(
+                style: TextStylesConstant.nunitoCaption16.copyWith(
                   color: isFormValid
                       ? ColorsConstant.neutral100
                       : ColorsConstant.primary200,

@@ -23,7 +23,7 @@ class CourseUserResponse {
   int startdate;
   int enddate;
   int marker;
-  int lastaccess;
+  int? lastaccess;
   bool isfavourite;
   bool hidden;
   List<dynamic> overviewfiles;
@@ -54,7 +54,7 @@ class CourseUserResponse {
     required this.startdate,
     required this.enddate,
     required this.marker,
-    required this.lastaccess,
+    this.lastaccess,
     required this.isfavourite,
     required this.hidden,
     required this.overviewfiles,

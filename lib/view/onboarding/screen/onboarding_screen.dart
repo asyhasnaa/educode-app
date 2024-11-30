@@ -45,7 +45,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   padding: const EdgeInsets.only(right: 24, top: 24),
                   child: Text(
                     'Skip',
-                    style: TextStylesConstant.nunitoHeading5.copyWith(
+                    style: TextStylesConstant.nunitoHeading18.copyWith(
                         color: ColorsConstant.primary300,
                         fontWeight: FontWeight.bold),
                   ),
@@ -76,7 +76,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             Expanded(
                               child: Text(
                                 contents[i].title,
-                                style: TextStylesConstant.nunitoHeading5,
+                                style: TextStylesConstant.nunitoHeading18,
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -86,7 +86,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             Expanded(
                               child: Text(
                                 contents[i].description,
-                                style: TextStylesConstant.nunitoCaption,
+                                style: TextStylesConstant.nunitoCaption16,
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -100,7 +100,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                  contents.length, (index) => BuildDot(index, context)),
+                  contents.length, (index) => buildDot(index, context)),
             ),
             const SizedBox(
               height: 20,
@@ -128,7 +128,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Container BuildDot(int index, BuildContext context) {
+  Container buildDot(int index, BuildContext context) {
     return Container(
       height: 10,
       width: currentIndex == index ? 30 : 10,
@@ -137,7 +137,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           borderRadius: BorderRadius.circular(20),
           color: currentIndex == index
               ? ColorsConstant.primary300
-              : ColorsConstant.primary100),
+              : ColorsConstant.neutral400),
     );
   }
 }

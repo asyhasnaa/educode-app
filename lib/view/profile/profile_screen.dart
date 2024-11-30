@@ -1,11 +1,12 @@
-import 'package:educode/routes/api_routes.dart';
+// ignore_for_file: deprecated_member_use
+
 import 'package:educode/services/api_login_service.dart.dart';
 import 'package:educode/services/api_profile_service.dart';
 import 'package:educode/utils/constants/color_constant.dart';
 import 'package:educode/utils/constants/icons..dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view/authentication/login_screen.dart';
-import 'package:educode/view_model/profile_conroller.dart';
+import 'package:educode/view_model/profile/profile_conroller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -22,13 +23,15 @@ class ProfileScreen extends StatelessWidget {
     profileController.fetchUserProfile();
 
     return Scaffold(
+      backgroundColor: ColorsConstant.neutral100,
       appBar: AppBar(
         title: Text(
           'Profile Pengguna',
-          style: TextStylesConstant.nunitoHeading5,
+          style: TextStylesConstant.nunitoHeading18,
         ),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        backgroundColor: ColorsConstant.neutral100,
       ),
       body: Center(
         child: Obx(() {
@@ -59,14 +62,14 @@ class ProfileScreen extends StatelessWidget {
                       children: [
                         Text(
                           '${profileController.profile.value.fullname}',
-                          style: TextStylesConstant.nunitoCaption.copyWith(
+                          style: TextStylesConstant.nunitoCaption16.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           '${profileController.profile.value.email}',
-                          style: TextStylesConstant.nunitoCaption,
+                          style: TextStylesConstant.nunitoCaption16,
                         ),
                       ],
                     ),
@@ -76,7 +79,7 @@ class ProfileScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         vertical: 16, horizontal: 12),
                     decoration: BoxDecoration(
-                      color: ColorsConstant.neutral100,
+                      color: ColorsConstant.neutral50,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -117,7 +120,7 @@ class ProfileScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         vertical: 16, horizontal: 12),
                     decoration: BoxDecoration(
-                      color: ColorsConstant.neutral100,
+                      color: ColorsConstant.neutral50,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -160,7 +163,7 @@ class ProfileScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 12, horizontal: 12),
                       decoration: BoxDecoration(
-                        color: ColorsConstant.neutral100,
+                        color: ColorsConstant.neutral50,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(

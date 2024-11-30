@@ -1,35 +1,39 @@
+// SliverChildAppBarWidget
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:educode/utils/constants/color_constant.dart';
 import 'package:educode/utils/constants/icons..dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
+import 'package:educode/view_model/course/course_controller.dart';
+import 'package:educode/view_model/authentication/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-class AppBarWidget extends StatelessWidget {
+class SliverChildAppBarWidget extends StatelessWidget {
   final String title;
   final String description;
-  final String courseName;
-  final int gradeLevel;
   final String backgroundImagePath;
   final bool showBackButton;
+  final Function(String) onChildSelected;
 
-  const AppBarWidget({
+  SliverChildAppBarWidget({
     super.key,
     required this.title,
     required this.description,
-    required this.courseName,
-    required this.gradeLevel,
     required this.backgroundImagePath,
-    this.showBackButton = true, // Default to showing the back button
+    required this.onChildSelected,
+    this.showBackButton = true,
   });
+
+  final loginController = Get.find<LoginController>();
+  final courseController = Get.find<CourseController>();
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      expandedHeight: 200,
-      automaticallyImplyLeading: false, // Prevent default back button
-      pinned: true,
+      expandedHeight: 160,
+      automaticallyImplyLeading: false,
+      pinned: false,
       floating: true,
       elevation: 0,
       backgroundColor: ColorsConstant.neutral100,
@@ -45,14 +49,14 @@ class AppBarWidget extends StatelessWidget {
               centerTitle: false,
               titlePadding: EdgeInsets.symmetric(
                 horizontal: 16,
-                vertical: top > 120 ? 16 : 10, // Adjusts padding on scroll
+                vertical: top > 120 ? 16 : 10,
               ),
               title: Text(
                 title,
                 style: TextStyle(
                   color: top > 120
                       ? Colors.transparent
-                      : Colors.black, // Adjust color based on scroll
+                      : ColorsConstant.primary300,
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
                 ),
@@ -75,52 +79,58 @@ class AppBarWidget extends StatelessWidget {
                         children: [
                           Text(
                             description,
-                            style: TextStylesConstant.nunitoHeading3.copyWith(
+                            style: TextStylesConstant.nunitoHeading24.copyWith(
                               color: Colors.white,
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 16),
                           Container(
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: const Color.fromARGB(81, 245, 245, 245),
+                              color: Colors.white.withOpacity(0.7),
                             ),
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 16),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: ColorsConstant.primary300,
-                                  ),
-                                  padding: const EdgeInsets.all(8),
-                                  child: const Icon(Icons.school,
-                                      color: Colors.white),
-                                ),
-                                const SizedBox(width: 12),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      courseName,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Category $gradeLevel",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                            child: Obx(() {
+                              final children = loginController.children;
+
+                              if (children.isEmpty) {
+                                return const Center(
+                                    child:
+                                        Text("Tidak ada data anak tersedia"));
+                              }
+
+                              return DropdownSearch<String>(
+                                items: (String filter, LoadProps? loadProps) {
+                                  return Future.value(
+                                    loginController.children
+                                        .map((child) => child['name'] as String)
+                                        .toList(),
+                                  );
+                                },
+                                selectedItem: children.first['name'] as String,
+                                onChanged: (selectedName) {
+                                  print("Selected name: $selectedName");
+                                  if (selectedName != null) {
+                                    final selectedChild = children.firstWhere(
+                                      (child) => child['name'] == selectedName,
+                                      orElse: () => null,
+                                    );
+
+                                    if (selectedChild != null) {
+                                      final childId =
+                                          selectedChild['childId'] as int;
+
+                                      print("Selected childId: $childId");
+
+                                      courseController
+                                          .updateSelectedUserId(childId);
+
+                                      onChildSelected(selectedName);
+                                    }
+                                  }
+                                },
+                              );
+                            }),
                           ),
                         ],
                       ),
@@ -134,12 +144,14 @@ class AppBarWidget extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                              color: Colors.white30,
-                              borderRadius: BorderRadius.circular(8)),
+                            color: Colors.white30,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           child: SvgPicture.asset(
                             IconsConstant.arrowLeft,
                             height: 24,
                             width: 24,
+                            // ignore: deprecated_member_use
                             color: ColorsConstant.white,
                           ),
                         ),

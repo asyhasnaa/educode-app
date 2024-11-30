@@ -15,7 +15,7 @@ class HomeAppbar extends StatelessWidget {
           children: [
             Text(
               "Selamat Datang, \nKartika Dewi",
-              style: TextStylesConstant.nunitoHeading5
+              style: TextStylesConstant.nunitoHeading18
                   .copyWith(color: ColorsConstant.black),
               textAlign: TextAlign.start,
             ),

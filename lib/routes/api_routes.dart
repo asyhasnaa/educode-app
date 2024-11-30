@@ -2,6 +2,7 @@ class ApiRoutes {
   static const String baseUrl = 'https://lms.educode.id';
   static const String baseFunctionUrl = '$baseUrl/webservice/rest/server.php?';
   static const String service = 'educodeAPI';
+  static const String wstoken = 'eb60c3bda800422e20df49087f462e81';
 
   //endpoints
   static const String loginApp = '$baseUrl/login/token.php?';

@@ -1,36 +1,19 @@
 name: educode
 description: "A new Flutter project."
 
-
-publish_to: "none" 
-
-
-
-
-
-
-
-
-
-
-
-
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
   sdk: ^3.5.3
 
-
-
-
-
-
-
 dependencies:
   animated_custom_dropdown: ^3.1.1
   cloud_firestore: ^5.4.4
   cupertino_icons: ^1.0.6
+  date_picker_timeline: ^1.2.6
+  dropdown_search: ^6.0.1
   expansion_tile_group: ^2.0.0
   firebase_auth: ^5.3.1
   firebase_core: ^3.6.0
@@ -46,44 +29,15 @@ dependencies:
   intl: ^0.19.0
   loading_indicator: ^3.1.1
   shared_preferences: ^2.3.2
+  table_calendar: ^3.1.2
 
 dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
 
-
-
-
 flutter:
-  
-  
-  
   uses-material-design: true
-  
+
   assets:
     - assets/images/
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  

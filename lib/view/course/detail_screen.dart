@@ -1,14 +1,14 @@
-import 'package:educode/global_widgets/app_bar_widget.dart';
+import 'package:educode/global_widgets/sliver_app_bar_widget.dart';
 import 'package:educode/models/api_response/detail_course_response.dart';
+import 'package:educode/routes/api_routes.dart';
 import 'package:educode/services/api_course.dart';
 import 'package:educode/services/api_detail_course_service.dart';
 import 'package:educode/services/api_login_service.dart.dart';
 import 'package:educode/utils/constants/color_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
-import 'package:educode/view_model/course_controller.dart';
-import 'package:educode/view_model/detail_course_controller.dart';
+import 'package:educode/view_model/course/course_controller.dart';
+import 'package:educode/view_model/course/detail_course_controller.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,12 +16,14 @@ class CourseDetailScreen extends StatelessWidget {
   final int courseId;
   final String courseTitle;
   final int category;
+  final int userId;
 
   const CourseDetailScreen({
     super.key,
     required this.courseId,
     required this.courseTitle,
     required this.category,
+    required this.userId,
   });
 
   @override
@@ -34,7 +36,7 @@ class CourseDetailScreen extends StatelessWidget {
     final course = courseController.course;
     final ApiAuthService loginService = ApiAuthService();
     detailCourseController.fetchDetailCourse(courseId);
-    courseController.fetchUserCourse();
+    // courseController.fetchUserCourse( );
 
     detailCourseController.fetchDetailCourse(courseId);
 
@@ -52,7 +54,7 @@ class CourseDetailScreen extends StatelessWidget {
             final course = courseController.course;
             return CustomScrollView(
               slivers: [
-                AppBarWidget(
+                SliverAppBarWidget(
                     title: "Coding Construct",
                     description: "Detail Course",
                     courseName: courseTitle,
@@ -60,41 +62,8 @@ class CourseDetailScreen extends StatelessWidget {
                     backgroundImagePath: "assets/images/bg_green.png"),
                 SliverList(
                     delegate: SliverChildListDelegate([
-                  const SizedBox(height: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      children: [
-                        Icon(Icons.star),
-                        SizedBox(width: 8),
-                        Flexible(
-                          child: Text(
-                            "Teacher : Aisyah Hasna Aulia",
-                            style: TextStyle(fontSize: 16),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      children: [
-                        Icon(Icons.description),
-                        SizedBox(width: 8),
-                        Flexible(
-                          child: Text(
-                            "Deskripsi : Detail course di sini",
-                            style: TextStyle(fontSize: 16),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
                         ListView.builder(
@@ -132,7 +101,8 @@ class CourseDetailScreen extends StatelessWidget {
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: ExpansionTile(
                                   title: Text(courseDetail.name,
-                                      style: TextStylesConstant.nunitoHeading5),
+                                      style:
+                                          TextStylesConstant.nunitoHeading18),
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -140,12 +110,12 @@ class CourseDetailScreen extends StatelessWidget {
                                       child: Column(
                                         children: [
                                           // Tampilkan teks summary yang sudah diparse
-                                          Text('Tanggal: $date'),
+                                          Text(
+                                            'Tanggal: $date',
+                                            style: TextStylesConstant
+                                                .nunitoCaptionBold,
+                                          ),
                                           const SizedBox(height: 8),
-                                          // Image.network(
-                                          //     'https://lms.educode.id/webservice/pluginfile.php/160/course/section/80/image.png?token=eb60c3bda800422e20df49087f462e81'),
-
-                                          // Menggunakan FutureBuilder untuk menampilkan gambar dengan token
                                           FutureBuilder<String?>(
                                             future: loginService.getToken(),
                                             builder: (context, snapshot) {
@@ -154,18 +124,92 @@ class CourseDetailScreen extends StatelessWidget {
                                                 return const CircularProgressIndicator();
                                               } else if (snapshot.hasError ||
                                                   snapshot.data == null) {
-                                                return const Text(
-                                                    'Gambar tidak tersedia');
+                                                return Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/images/no_image.png', // Path gambar "no image"
+                                                      height: 150,
+                                                      width: 150,
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    const Text(
+                                                      'Gambar tidak ditemukan',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: Colors.grey),
+                                                    ),
+                                                  ],
+                                                );
                                               } else {
                                                 final token = snapshot.data;
                                                 final imageUrlWithToken =
-                                                    '$imageUrl?token=$token';
+                                                    '$imageUrl?token=${ApiRoutes.wstoken}';
 
                                                 return imageUrl.isNotEmpty
-                                                    ? Image.network(
-                                                        imageUrlWithToken,
+                                                    ? Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color:
+                                                                  Colors.grey,
+                                                              blurRadius: 5,
+                                                              offset:
+                                                                  Offset(0, 4),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        clipBehavior:
+                                                            Clip.hardEdge,
+                                                        child: Image.network(
+                                                          imageUrlWithToken,
+                                                          fit: BoxFit.cover,
+                                                          loadingBuilder: (context,
+                                                              child,
+                                                              loadingProgress) {
+                                                            if (loadingProgress ==
+                                                                null) {
+                                                              return child; // Gambar selesai dimuat
+                                                            }
+                                                            return const Center(
+                                                              child:
+                                                                  CircularProgressIndicator(),
+                                                            );
+                                                          },
+                                                          errorBuilder:
+                                                              (context, error,
+                                                                  stackTrace) {
+                                                            return Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Image.asset(
+                                                                  'assets/images/no_image.png', // Gambar fallback
+                                                                  height: 150,
+                                                                  width: 150,
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 10),
+                                                                const Text(
+                                                                  'Gambar tidak ditemukan',
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          16,
+                                                                      color: Colors
+                                                                          .grey),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          },
+                                                        ),
                                                       )
-                                                    : const Text('ii');
+                                                    : Text('ii');
                                               }
                                             },
                                           ),
@@ -191,8 +235,8 @@ class CourseDetailScreen extends StatelessWidget {
                                         ),
                                         title: Text(
                                           module.name,
-                                          style:
-                                              TextStylesConstant.nunitoHeading6,
+                                          style: TextStylesConstant
+                                              .nunitoHeading16,
                                         ),
                                         subtitle: isAssignment
                                             ? Column(
@@ -207,39 +251,39 @@ class CourseDetailScreen extends StatelessWidget {
                                                 ],
                                               )
                                             : null,
-                                        trailing: isAssignment
-                                            ? Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.green,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 4,
-                                                        horizontal: 8),
-                                                child: const Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .check_circle_outline,
-                                                      color: Colors.white,
-                                                    ),
-                                                    SizedBox(width: 4),
-                                                    Text(
-                                                      "Done",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            : null,
+                                        // trailing: isAssignment
+                                        //     ? Container(
+                                        //         decoration: BoxDecoration(
+                                        //           color: Colors.green,
+                                        //           borderRadius:
+                                        //               BorderRadius.circular(8),
+                                        //         ),
+                                        //         padding:
+                                        //             const EdgeInsets.symmetric(
+                                        //                 vertical: 4,
+                                        //                 horizontal: 8),
+                                        //         child: const Row(
+                                        //           mainAxisSize:
+                                        //               MainAxisSize.min,
+                                        //           children: [
+                                        //             Icon(
+                                        //               Icons
+                                        //                   .check_circle_outline,
+                                        //               color: Colors.white,
+                                        //             ),
+                                        //             SizedBox(width: 4),
+                                        //             Text(
+                                        //               "Done",
+                                        //               style: TextStyle(
+                                        //                 color: Colors.white,
+                                        //                 fontWeight:
+                                        //                     FontWeight.bold,
+                                        //               ),
+                                        //             ),
+                                        //           ],
+                                        //         ),
+                                        //       )
+                                        //     : null,
                                       );
                                     }),
                                   ],

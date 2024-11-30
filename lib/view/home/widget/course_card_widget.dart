@@ -3,7 +3,7 @@ import 'package:educode/utils/constants/color_constant.dart';
 import 'package:educode/utils/constants/icons..dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view/course/detail_screen.dart';
-import 'package:educode/view_model/course_controller.dart';
+import 'package:educode/view_model/course/course_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,7 +23,32 @@ class CourseCardWidget extends StatelessWidget {
       }
 
       if (courseController.course.isEmpty) {
-        return const Center(child: Text('No courses available'));
+        return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Center(
+              child: Container(
+                height: 200,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: ColorsConstant.neutral50,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      IconsConstant.onboarding1,
+                      height: 130,
+                    ),
+                    Text(
+                      'Tidak ada course yang diambil',
+                      style: TextStylesConstant.nunitoCaptionBold,
+                    ),
+                  ],
+                ),
+              ),
+            ));
       }
 
       return SizedBox(
@@ -110,13 +135,13 @@ class CourseCardWidget extends StatelessWidget {
                             const SizedBox(height: 8),
 
                             GlobalButtonWidget(
-                              text: 'Detail Course}',
+                              text: 'Detail Course',
                               onTap: () {
                                 Get.to(() => CourseDetailScreen(
-                                      courseId: course.id,
-                                      courseTitle: course.fullname,
-                                      category: course.category,
-                                    ));
+                                    courseId: course.id,
+                                    courseTitle: course.fullname,
+                                    category: course.category,
+                                    userId: courseController.userId.value));
                               },
                               buttonColor: ColorsConstant.secondary300,
                               textColor: ColorsConstant.black,
