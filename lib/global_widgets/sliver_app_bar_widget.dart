@@ -1,5 +1,5 @@
 import 'package:educode/utils/constants/color_constant.dart';
-import 'package:educode/utils/constants/icons..dart';
+import 'package:educode/utils/constants/icons_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -112,13 +112,11 @@ class SliverAppBarWidget extends StatelessWidget {
                                         ),
                                         maxLines: 3,
                                       ),
-                                      Text(
-                                        "Category $gradeLevel",
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                        ),
-                                      ),
+                                      Text("Category $gradeLevel",
+                                          style: TextStylesConstant
+                                              .nunitoButtonSemibold
+                                              .copyWith(
+                                                  color: ColorsConstant.white)),
                                     ],
                                   ),
                                 ),
@@ -143,6 +141,7 @@ class SliverAppBarWidget extends StatelessWidget {
                             IconsConstant.arrowLeft,
                             height: 24,
                             width: 24,
+                            // ignore: deprecated_member_use
                             color: ColorsConstant.white,
                           ),
                         ),

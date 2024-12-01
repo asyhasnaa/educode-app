@@ -1,11 +1,13 @@
+// ignore_for_file: use_build_context_synchronously, avoid_types_as_parameter_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:educode/global_widgets/global_button_widget.dart';
 import 'package:educode/global_widgets/global_text_field_widget.dart';
 import 'package:educode/utils/constants/color_constant.dart';
-import 'package:educode/view_model/home/get_children.dart';
 import 'package:educode/models/firebase_response/tagihan_response.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -18,8 +20,6 @@ class GenerateInvoiceScreen extends StatefulWidget {
 
 class _GenerateInvoiceScreenState extends State<GenerateInvoiceScreen> {
   final TextEditingController dateController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  List<String> childrenNames = [];
   String? selectedChildName;
   String? selectedParentUsername;
   List<Map<String, String>> childrenWithParents = [];
@@ -40,9 +40,13 @@ class _GenerateInvoiceScreenState extends State<GenerateInvoiceScreen> {
 
       List<Map<String, String>> fetchedChildren = [];
       for (var userDoc in usersSnapshot.docs) {
-        print('Processing doc: ${userDoc.data()}');
+        if (kDebugMode) {
+          print('Processing doc: ${userDoc.data()}');
+        }
         String parentUsername = userDoc['username'];
-        print('Parent Username: $parentUsername');
+        if (kDebugMode) {
+          print('Parent Username: $parentUsername');
+        }
         List<dynamic> children = userDoc['children'];
         for (var child in children) {
           if (child is Map<String, dynamic>) {
@@ -61,7 +65,9 @@ class _GenerateInvoiceScreenState extends State<GenerateInvoiceScreen> {
         childrenWithParents = fetchedChildren;
       });
     } catch (e) {
-      print("Error fetching children names: $e");
+      if (kDebugMode) {
+        print("Error fetching children names: $e");
+      }
     }
   }
 
@@ -157,7 +163,7 @@ class _GenerateInvoiceScreenState extends State<GenerateInvoiceScreen> {
       await FirebaseFirestore.instance.collection('invoice').add(invoiceData);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: const Text('Tagihan berhasil generate')),
+        const SnackBar(content: Text('Tagihan berhasil generate')),
       );
 
       // Clear all fields after saving
@@ -206,7 +212,7 @@ class _GenerateInvoiceScreenState extends State<GenerateInvoiceScreen> {
                   'Tanggal Tagihan',
                   style: TextStylesConstant.nunitoHeading16,
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 GestureDetector(
                   onTap: () => _selectDate(context),
                   child: AbsorbPointer(
@@ -222,7 +228,7 @@ class _GenerateInvoiceScreenState extends State<GenerateInvoiceScreen> {
                   'Nama Anak',
                   style: TextStylesConstant.nunitoHeading16,
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 DropdownSearch<String>(
                   items: (String filter, LoadProps? loadProps) async {
                     return childrenWithParents.map((data) {

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -30,7 +31,9 @@ class ChildrenController extends GetxController {
       }
       childrenWithParents.value = fetchedChildren;
     } catch (e) {
-      print("Error fetching children names: $e");
+      if (kDebugMode) {
+        print("Error fetching children names: $e");
+      }
     } finally {
       isDropdownLoading.value = false;
     }

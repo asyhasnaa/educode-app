@@ -6,6 +6,7 @@ import 'package:educode/utils/constants/color_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view_model/course/course_controller.dart';
 import 'package:educode/view_model/schedule/schedule_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -107,6 +108,7 @@ class LoginController extends GetxController {
   //Metode Login menggunakan Firebase
   Future<void> _loginWithFirebase() async {
     try {
+      // ignore: unused_local_variable
       UserCredential userCredential =
           await _firebaseAuth.signInWithEmailAndPassword(
         email: usernameController.text.trim(),
@@ -121,13 +123,24 @@ class LoginController extends GetxController {
   }
 
   void validatePassword(String value) {
-    passwordErrorText.value = value.length < 6
-        ? 'Kata sandi harus terdiri dari minimal 6 karakter'
-        : null;
+    if (value.isEmpty) {
+      passwordErrorText.value = null;
+    } else if (value.length < 6) {
+      passwordErrorText.value =
+          'Kata sandi harus terdiri dari minimal 6 karakter';
+    } else {
+      passwordErrorText.value = null;
+    }
     validateForm();
   }
 
   void validateForm() {
+    emailErrorText.value =
+        usernameController.text.isEmpty ? null : emailErrorText.value;
+
+    passwordErrorText.value =
+        passwordController.text.isEmpty ? null : passwordErrorText.value;
+
     isFormValid.value = passwordErrorText.value == null &&
         usernameController.text.isNotEmpty &&
         passwordController.text.isNotEmpty;
@@ -198,10 +211,14 @@ class LoginController extends GetxController {
   Future<void> _checkToken() async {
     String? token = await _apiAuthService.getToken();
     if (token != null) {
-      print("Token ditemukan di Shared Preferences: $token");
+      if (kDebugMode) {
+        print("Token ditemukan di Shared Preferences: $token");
+      }
       // Lakukan navigasi ke layar utama atau yang sesuai
     } else {
-      print("Token tidak ditemukan, pengguna perlu login.");
+      if (kDebugMode) {
+        print("Token tidak ditemukan, pengguna perlu login.");
+      }
       // Navigasi ke layar login jika diperlukan
     }
   }
@@ -219,7 +236,9 @@ class LoginController extends GetxController {
         // Jika user ditemukan, ambil data anak (children)
         final data = userDoc.data();
         children.value = data?['children'] ?? [];
-        print("Children list: ${children.value}");
+        if (kDebugMode) {
+          print("Children list: $children");
+        }
       } else {
         Get.snackbar('Error', 'User not found in Firebase');
       }

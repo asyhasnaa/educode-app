@@ -8,6 +8,7 @@ import 'package:educode/utils/constants/color_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view_model/course/course_controller.dart';
 import 'package:educode/view_model/course/detail_course_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -87,9 +88,15 @@ class CourseDetailScreen extends StatelessWidget {
                             final imageUrl = imgMatch?.group(1) ?? '';
 
                             // Debugging: print ke log untuk melihat hasil regex
-                            print('Summary: ${courseDetail.summary}');
-                            print('Tanggal yang ditemukan: $date');
-                            print('URL gambar yang ditemukan: $imageUrl');
+                            if (kDebugMode) {
+                              print('Summary: ${courseDetail.summary}');
+                            }
+                            if (kDebugMode) {
+                              print('Tanggal yang ditemukan: $date');
+                            }
+                            if (kDebugMode) {
+                              print('URL gambar yang ditemukan: $imageUrl');
+                            }
 
                             return Card(
                               color: ColorsConstant.white,
@@ -143,7 +150,6 @@ class CourseDetailScreen extends StatelessWidget {
                                                   ],
                                                 );
                                               } else {
-                                                final token = snapshot.data;
                                                 final imageUrlWithToken =
                                                     '$imageUrl?token=${ApiRoutes.wstoken}';
 
@@ -153,14 +159,14 @@ class CourseDetailScreen extends StatelessWidget {
                                                             BoxDecoration(
                                                           borderRadius:
                                                               BorderRadius
-                                                                  .circular(10),
-                                                          boxShadow: [
+                                                                  .circular(8),
+                                                          boxShadow: const [
                                                             BoxShadow(
                                                               color:
                                                                   Colors.grey,
-                                                              blurRadius: 5,
+                                                              blurRadius: 2,
                                                               offset:
-                                                                  Offset(0, 4),
+                                                                  Offset(0, 2),
                                                             ),
                                                           ],
                                                         ),
@@ -209,7 +215,7 @@ class CourseDetailScreen extends StatelessWidget {
                                                           },
                                                         ),
                                                       )
-                                                    : Text('ii');
+                                                    : const Text('ii');
                                               }
                                             },
                                           ),
@@ -221,8 +227,6 @@ class CourseDetailScreen extends StatelessWidget {
                                     ...courseDetail.modules.map((module) {
                                       bool isAssignment =
                                           module.modname == "assign";
-                                      String dueDate = '';
-                                      String openDate = '';
 
                                       return ListTile(
                                         leading: Icon(
@@ -245,45 +249,18 @@ class CourseDetailScreen extends StatelessWidget {
                                                 children: [
                                                   const SizedBox(height: 4),
                                                   Text(
-                                                      "Opened : ${_getDataFromModule(module, "Opened:")}"),
+                                                    "Opened : ${_getDataFromModule(module, "Opened:")}",
+                                                    style: TextStylesConstant
+                                                        .nunitoFooterSemiBold,
+                                                  ),
                                                   Text(
-                                                      "Due : ${_getDataFromModule(module, "Due:")}"),
+                                                    "Due : ${_getDataFromModule(module, "Due:")}",
+                                                    style: TextStylesConstant
+                                                        .nunitoFooterSemiBold,
+                                                  ),
                                                 ],
                                               )
                                             : null,
-                                        // trailing: isAssignment
-                                        //     ? Container(
-                                        //         decoration: BoxDecoration(
-                                        //           color: Colors.green,
-                                        //           borderRadius:
-                                        //               BorderRadius.circular(8),
-                                        //         ),
-                                        //         padding:
-                                        //             const EdgeInsets.symmetric(
-                                        //                 vertical: 4,
-                                        //                 horizontal: 8),
-                                        //         child: const Row(
-                                        //           mainAxisSize:
-                                        //               MainAxisSize.min,
-                                        //           children: [
-                                        //             Icon(
-                                        //               Icons
-                                        //                   .check_circle_outline,
-                                        //               color: Colors.white,
-                                        //             ),
-                                        //             SizedBox(width: 4),
-                                        //             Text(
-                                        //               "Done",
-                                        //               style: TextStyle(
-                                        //                 color: Colors.white,
-                                        //                 fontWeight:
-                                        //                     FontWeight.bold,
-                                        //               ),
-                                        //             ),
-                                        //           ],
-                                        //         ),
-                                        //       )
-                                        //     : null,
                                       );
                                     }),
                                   ],

@@ -1,7 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:educode/services/api_login_service.dart.dart';
-import 'package:educode/services/api_profile_service.dart';
 import 'package:educode/utils/constants/color_constant.dart';
-import 'package:educode/utils/constants/icons..dart';
+import 'package:educode/utils/constants/icons_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class AdminProfileScreen extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
+                      const Center(
                         child: CircleAvatar(
                             radius: 50,
                             backgroundImage:
@@ -87,7 +88,7 @@ class AdminProfileScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 12),
                             SvgPicture.asset(
-                              IconsConstant.arrow_circle_right,
+                              IconsConstant.arrowCircleRight,
                               color: ColorsConstant.primary300,
                             ),
                           ],
@@ -129,7 +130,7 @@ class AdminProfileScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 12),
                             SvgPicture.asset(
-                              IconsConstant.arrow_circle_right,
+                              IconsConstant.arrowCircleRight,
                               color: ColorsConstant.primary300,
                             ),
                           ],
@@ -174,7 +175,7 @@ class AdminProfileScreen extends StatelessWidget {
                               ),
                               const SizedBox(width: 12),
                               SvgPicture.asset(
-                                IconsConstant.arrow_circle_right,
+                                IconsConstant.arrowCircleRight,
                                 color: ColorsConstant.primary300,
                               )
                             ],

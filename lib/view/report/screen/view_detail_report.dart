@@ -1,11 +1,13 @@
 import 'package:educode/global_widgets/sliver_app_bar_widget.dart';
 import 'package:educode/models/api_response/grade_item_model.dart';
 import 'package:educode/services/api_course.dart';
+import 'package:educode/services/api_detail_course_service.dart';
 import 'package:educode/services/api_grade_item_service.dart';
 import 'package:educode/utils/constants/color_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view_model/course/course_controller.dart';
 import 'package:educode/view_model/authentication/login_controller.dart';
+import 'package:educode/view_model/course/detail_course_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -33,6 +35,8 @@ class _DetailGradeReportScreenState extends State<DetailGradeReportScreen> {
   final CourseController courseController =
       Get.put(CourseController(apiCourseService: ApiCourseService()));
   final ApiGradeReportService apiGradeReportService = ApiGradeReportService();
+  final DetailCourseController detailCourseController = Get.put(
+      DetailCourseController(apiDetailCourseService: ApiDetailCourseService()));
 
   String? selectedCourseId;
   List<String> months = [
@@ -90,11 +94,11 @@ class _DetailGradeReportScreenState extends State<DetailGradeReportScreen> {
 
               return CustomScrollView(
                 slivers: [
-                  SliverAppBarWidget(
+                  const SliverAppBarWidget(
                     title: 'Laporan Belajar',
                     description: 'Laporan Belajar',
                     backgroundImagePath: 'assets/images/bg_green.png',
-                    courseName: '',
+                    courseName: 'courseTitle',
                     gradeLevel: 2,
                   ),
                   SliverList(
@@ -105,6 +109,38 @@ class _DetailGradeReportScreenState extends State<DetailGradeReportScreen> {
                           child: Column(
                             children: [
                               // Row untuk "Current grades" dan Dropdown filter bulan
+
+                              // DropdownSearch<String>(
+                              //   popupProps: PopupProps.menu(
+                              //     showSearchBox:
+                              //         false, // Nonaktifkan kotak pencarian (jika tidak dibutuhkan)
+                              //     fit: FlexFit.loose,
+                              //     constraints: const BoxConstraints(
+                              //         maxHeight: 300), // Atur tinggi popup
+                              //   ),
+                              //   decoratorProps: DropDownDecoratorProps(
+                              //     decoration: InputDecoration(
+                              //       labelText: "Pilih Bulan",
+                              //       border: OutlineInputBorder(
+                              //         borderRadius: BorderRadius.circular(8),
+                              //         borderSide: BorderSide(
+                              //             color: ColorsConstant.neutral300),
+                              //       ),
+                              //     ),
+                              //   ),
+                              //   items: (String filter, LoadProps? loadprops) {
+                              //     return months;
+                              //   }, // Daftar bulan
+                              //   selectedItem:
+                              //       selectedMonth, // Item yang dipilih saat ini
+                              //   onChanged: (String? newValue) {
+                              //     setState(() {
+                              //       selectedMonth =
+                              //           newValue; // Ubah bulan yang dipilih
+                              //     });
+                              //   },
+                              // ),
+
                               DropdownButton<String>(
                                 dropdownColor: ColorsConstant.neutral50,
                                 value: selectedMonth,
@@ -125,6 +161,7 @@ class _DetailGradeReportScreenState extends State<DetailGradeReportScreen> {
                                   );
                                 }).toList(),
                               ),
+
                               const Divider(),
                               // Daftar nilai (grade items)
                               Text(

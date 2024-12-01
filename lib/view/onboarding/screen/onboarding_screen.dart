@@ -83,7 +83,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             const SizedBox(
                               height: 26,
                             ),
-                            Expanded(
+                            Flexible(
                               child: Text(
                                 contents[i].description,
                                 style: TextStylesConstant.nunitoCaption16,

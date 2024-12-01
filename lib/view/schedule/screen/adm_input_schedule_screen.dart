@@ -1,9 +1,9 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:educode/services/api_course.dart';
 import 'package:educode/view_model/course/course_controller.dart';
-import 'package:educode/view_model/home/get_children.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view_model/schedule/schedule_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:educode/utils/constants/color_constant.dart';
 import 'package:get/get.dart';
@@ -53,9 +53,13 @@ class _InputScheduleScreenState extends State<InputScheduleScreen> {
 
       List<Map<String, String>> fetchedChildren = [];
       for (var userDoc in usersSnapshot.docs) {
-        print('Processing doc: ${userDoc.data()}');
+        if (kDebugMode) {
+          print('Processing doc: ${userDoc.data()}');
+        }
         String parentUsername = userDoc['username'];
-        print('Parent Username: $parentUsername');
+        if (kDebugMode) {
+          print('Parent Username: $parentUsername');
+        }
         List<dynamic> children = userDoc['children'];
         for (var child in children) {
           if (child is Map<String, dynamic>) {
@@ -74,7 +78,9 @@ class _InputScheduleScreenState extends State<InputScheduleScreen> {
         childrenWithParents = fetchedChildren;
       });
     } catch (e) {
-      print("Error fetching children names: $e");
+      if (kDebugMode) {
+        print("Error fetching children names: $e");
+      }
     }
 
     setState(() {
@@ -120,7 +126,8 @@ class _InputScheduleScreenState extends State<InputScheduleScreen> {
   void _saveSchedule() async {
     if (selectedChildName == null || selectedParentUsername == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Mohon pilih nama anak dan nama orang tua')),
+        const SnackBar(
+            content: Text('Mohon pilih nama anak dan nama orang tua')),
       );
       return;
     }
@@ -146,7 +153,7 @@ class _InputScheduleScreenState extends State<InputScheduleScreen> {
             .collection('schedules')
             .add(scheduleData);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Jadwal berhasil disimpan')),
+          const SnackBar(content: Text('Jadwal berhasil disimpan')),
         );
       } else {
         await FirebaseFirestore.instance
@@ -154,7 +161,7 @@ class _InputScheduleScreenState extends State<InputScheduleScreen> {
             .doc(widget.scheduleData!['id'])
             .update(scheduleData);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Jadwal berhasil diperbarui')),
+          const SnackBar(content: Text('Jadwal berhasil diperbarui')),
         );
       }
       Navigator.pop(context);
@@ -189,10 +196,14 @@ class _InputScheduleScreenState extends State<InputScheduleScreen> {
           selectedCourse = data['course'];
         });
       } else {
-        print("Document with ID $docId not found.");
+        if (kDebugMode) {
+          print("Document with ID $docId not found.");
+        }
       }
     } catch (e) {
-      print("Error loading schedule data: $e");
+      if (kDebugMode) {
+        print("Error loading schedule data: $e");
+      }
     }
   }
 
@@ -263,6 +274,76 @@ class _InputScheduleScreenState extends State<InputScheduleScreen> {
   Widget build(BuildContext context) {
     final isEditMode = widget.scheduleData != null; // Mode Edit atau Tambah
 
+    var dropdownSearch = DropdownSearch<String>(
+      items: (String filter, LoadProps? loadProps) async {
+        return childrenWithParents.map((data) {
+          return '${data['name']} (${data['username']})';
+        }).toList();
+      },
+      popupProps: PopupProps.menu(
+        fit: FlexFit.loose,
+        constraints:
+            const BoxConstraints(maxHeight: 400), // Tinggi maksimal popup
+        menuProps: MenuProps(
+          borderRadius: BorderRadius.circular(10), // Radius sudut popup
+          backgroundColor:
+              ColorsConstant.neutral50, // Warna latar belakang popup
+          elevation: 4, // Efek bayangan
+        ),
+        itemBuilder: (context, item, isSelected, isHighlighted) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? ColorsConstant.primary300
+                  : isHighlighted
+                      ? ColorsConstant.primary100
+                      : Colors.transparent,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              item,
+              style: isSelected
+                  ? TextStylesConstant.nunitoCaptionBold.copyWith(
+                      color: Colors.white, // Warna teks jika dipilih
+                      fontSize: 16, // Ukuran teks jika dipilih
+                    )
+                  : TextStylesConstant.nunitoButtonBold.copyWith(
+                      color: ColorsConstant.neutral800, // Warna teks default
+                      fontSize: 14, // Ukuran teks default
+                    ),
+            ),
+          );
+        },
+      ),
+      decoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStylesConstant.nunitoCaptionBold,
+          decoration: InputDecoration(
+            hintText: 'Pilih Nama Anak',
+            hintStyle: TextStylesConstant.nunitoCaptionBold,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                color: ColorsConstant.neutral200,
+              ),
+            ),
+          )),
+      onChanged: (value) {
+        setState(() {
+          // Pecahkan nilai untuk mengambil nama anak dan nama orang tua
+          final split = value?.split(' (');
+          if (split != null && split.length > 1) {
+            selectedChildName = split[0];
+            selectedParentUsername =
+                split[1].replaceAll(')', ''); // Hilangkan tanda ')'
+          }
+        });
+      },
+      selectedItem: selectedChildName != null && selectedParentUsername != null
+          ? '$selectedChildName ($selectedParentUsername)'
+          : null,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -280,93 +361,13 @@ class _InputScheduleScreenState extends State<InputScheduleScreen> {
                 'Nama Anak',
                 style: TextStylesConstant.nunitoHeading16,
               ),
-              isDropdownLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : DropdownSearch<String>(
-                      items: (String filter, LoadProps? loadProps) async {
-                        return childrenWithParents.map((data) {
-                          return '${data['name']} (${data['username']})';
-                        }).toList();
-                      },
-                      popupProps: PopupProps.menu(
-                        fit: FlexFit.loose,
-                        constraints: const BoxConstraints(
-                            maxHeight: 400), // Tinggi maksimal popup
-                        menuProps: MenuProps(
-                          borderRadius:
-                              BorderRadius.circular(10), // Radius sudut popup
-                          backgroundColor: ColorsConstant
-                              .neutral50, // Warna latar belakang popup
-                          elevation: 4, // Efek bayangan
-                        ),
-                        itemBuilder:
-                            (context, item, isSelected, isHighlighted) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? ColorsConstant.primary300
-                                  : isHighlighted
-                                      ? ColorsConstant.primary100
-                                      : Colors.transparent,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              item,
-                              style: isSelected
-                                  ? TextStylesConstant.nunitoCaptionBold
-                                      .copyWith(
-                                      color: Colors
-                                          .white, // Warna teks jika dipilih
-                                      fontSize: 16, // Ukuran teks jika dipilih
-                                    )
-                                  : TextStylesConstant.nunitoButtonBold
-                                      .copyWith(
-                                      color: ColorsConstant
-                                          .neutral800, // Warna teks default
-                                      fontSize: 14, // Ukuran teks default
-                                    ),
-                            ),
-                          );
-                        },
-                      ),
-                      decoratorProps: DropDownDecoratorProps(
-                          baseStyle: TextStylesConstant.nunitoCaptionBold,
-                          decoration: InputDecoration(
-                            hintText: 'Pilih Nama Anak',
-                            hintStyle: TextStylesConstant.nunitoCaptionBold,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: ColorsConstant.neutral200,
-                              ),
-                            ),
-                          )),
-                      onChanged: (value) {
-                        setState(() {
-                          // Pecahkan nilai untuk mengambil nama anak dan nama orang tua
-                          final split = value?.split(' (');
-                          if (split != null && split.length > 1) {
-                            selectedChildName = split[0];
-                            selectedParentUsername = split[1]
-                                .replaceAll(')', ''); // Hilangkan tanda ')'
-                          }
-                        });
-                      },
-                      selectedItem: selectedChildName != null &&
-                              selectedParentUsername != null
-                          ? '$selectedChildName ($selectedParentUsername)'
-                          : null,
-                    ),
+              dropdownSearch,
               const SizedBox(height: 14),
               Text('Category', style: TextStylesConstant.nunitoHeading16),
               DropdownSearch<String>(
                   items: (String filter, LoadProps? loadProps) async {
                     return categories.map((category) {
-                      return '$category';
+                      return category;
                     }).toList();
                   },
                   popupProps: PopupProps.menu(
@@ -433,13 +434,13 @@ class _InputScheduleScreenState extends State<InputScheduleScreen> {
               Text('Course', style: TextStylesConstant.nunitoHeading16),
               Obx(() {
                 if (courseController.courseNames.isEmpty) {
-                  return Text(
+                  return const Text(
                       'Tidak ada kursus tersedia'); // Tampilkan pesan jika kosong
                 }
                 return DropdownSearch<String>(
                   items: (String filter, LoadProps? loadProps) async {
                     return courseController.courseNames.map((name) {
-                      return '$name';
+                      return name;
                     }).toList();
                   },
                   popupProps: PopupProps.menu(
@@ -587,11 +588,11 @@ class _InputScheduleScreenState extends State<InputScheduleScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 18),
+              const SizedBox(height: 18),
               const SizedBox(height: 26),
               GlobalButtonWidget(
                 text: isEditMode ? 'Update Jadwal' : 'Simpan Jadwal',
-                onTap: _saveSchedule,
+                onTap: isEditMode ? updateSchedule : _saveSchedule,
               ),
             ],
           ),

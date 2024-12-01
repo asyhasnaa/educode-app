@@ -1,4 +1,4 @@
-import 'package:educode/utils/constants/icons..dart';
+import 'package:educode/utils/constants/icons_constant.dart';
 
 class OnboardingModel {
   String image;

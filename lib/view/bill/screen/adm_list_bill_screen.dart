@@ -1,19 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:educode/models/firebase_response/tagihan_response.dart';
 import 'package:educode/utils/constants/color_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
+import 'package:educode/view/bill/screen/detail_bill_screen.dart';
 import 'package:educode/view/bill/screen/generate_invoice.dart';
 import 'package:educode/view/bill/widget/invoice_card_widget.dart';
 import 'package:educode/view_model/invoice/invoice_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:intl/intl.dart';
 
 class AdminInvoiceListPage extends StatefulWidget {
   const AdminInvoiceListPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _AdminInvoiceListPageState createState() => _AdminInvoiceListPageState();
 }
 
@@ -49,7 +47,7 @@ class _AdminInvoiceListPageState extends State<AdminInvoiceListPage> {
               final summary = invoiceController.getInvoiceSummary();
               return _buildSummaryWidget(summary);
             }),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
@@ -70,7 +68,7 @@ class _AdminInvoiceListPageState extends State<AdminInvoiceListPage> {
                   Expanded(
                     child: TextField(
                       decoration: const InputDecoration(
-                        hintText: 'Search Invoice...',
+                        hintText: 'Cari Invoice...',
                         border: InputBorder.none,
                       ),
                       onChanged: (query) {
@@ -101,18 +99,18 @@ class _AdminInvoiceListPageState extends State<AdminInvoiceListPage> {
                 const Spacer(),
                 DropdownButton<String>(
                   value: selectedFilter,
-                  items: [
+                  items: const [
                     DropdownMenuItem(
-                      child: Text('Semua'),
                       value: 'All',
+                      child: Text('Semua'),
                     ),
                     DropdownMenuItem(
-                      child: Text('Lunas'),
                       value: 'paid',
+                      child: Text('Lunas'),
                     ),
                     DropdownMenuItem(
-                      child: Text('Belum Bayar'),
                       value: 'unpaid',
+                      child: Text('Belum Bayar'),
                     ),
                   ],
                   onChanged: (String? value) {
@@ -142,7 +140,18 @@ class _AdminInvoiceListPageState extends State<AdminInvoiceListPage> {
                   itemBuilder: (context, index) {
                     final invoice =
                         invoiceController.filteredAdminInvoices[index];
-                    return InvoiceCardWidget(invoice: invoice);
+                    return GestureDetector(
+                      child: InvoiceCardWidget(
+                        invoice: invoice,
+                      ),
+                      onTap: () {
+                        Get.to(() => DetailTagihanScreen(
+                              invoice: invoice,
+                              parent: invoice['username'],
+                              emailParent: 'Nama Orangtua',
+                            ));
+                      },
+                    );
                   },
                 );
               }),
@@ -160,8 +169,8 @@ class _AdminInvoiceListPageState extends State<AdminInvoiceListPage> {
             ),
           );
         },
-        child: const Icon(Icons.add, color: Colors.white, size: 30),
         tooltip: 'Tambah Invoice',
+        child: const Icon(Icons.add, color: Colors.white, size: 30),
       ),
     );
   }

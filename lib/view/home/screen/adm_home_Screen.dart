@@ -1,9 +1,8 @@
 import 'package:educode/services/api_course.dart';
 import 'package:educode/services/api_profile_service.dart';
 import 'package:educode/utils/constants/color_constant.dart';
-import 'package:educode/utils/constants/icons..dart';
+import 'package:educode/utils/constants/icons_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
-import 'package:educode/view/home/widget/schedule_card_widget.dart';
 import 'package:educode/view/schedule/screen/adm_input_schedule_screen.dart';
 import 'package:educode/view/schedule/screen/adm_show_schedule_screen.dart';
 import 'package:educode/view/schedule/widget/adm_card_schedule_widget.dart';
@@ -13,32 +12,19 @@ import 'package:educode/view_model/authentication/login_controller.dart';
 import 'package:educode/view_model/profile/profile_conroller.dart';
 import 'package:educode/view_model/schedule/schedule_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 
-class AdminHomeScreen extends StatefulWidget {
-  const AdminHomeScreen({super.key});
-
-  @override
-  State<AdminHomeScreen> createState() => _AdminHomeScreenState();
-}
-
-class _AdminHomeScreenState extends State<AdminHomeScreen> {
+class AdminHomeScreen extends StatelessWidget {
   final CourseController courseController =
       Get.put(CourseController(apiCourseService: ApiCourseService()));
   final LoginController loginController = Get.find();
   final ProfileController profileController =
       Get.put(ProfileController(apiProfileService: ApiProfileService()));
-  final invoiceController = Get.put(InvoiceController());
+  final InvoiceController invoiceController = Get.put(InvoiceController());
   final ScheduleController scheduleController = Get.put(ScheduleController());
-  DateTime selectedDate = DateTime.now();
-  @override
-  void initState() {
-    super.initState();
-    scheduleController.fetchScheduleForAdmin(selectedDate);
-  }
+
+  final Rx<DateTime> selectedDate = DateTime.now().obs;
 
   @override
   Widget build(BuildContext context) {
@@ -66,114 +52,115 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 24,
-                ),
+                const SizedBox(height: 24),
                 Text(
                   'Recapt Tagihan',
                   style: TextStylesConstant.nunitoHeading18,
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Obx(() {
                   final summary = invoiceController.getInvoiceSummary();
                   return _buildSummaryWidget(summary);
                 }),
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Jadwal Hari ini',
-                        style: TextStylesConstant.nunitoHeading18,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Jadwal Hari ini',
+                      style: TextStylesConstant.nunitoHeading18,
+                    ),
+                    TextButton(
+                      onPressed: () => Get.to(() => AdminShowSchedule()),
+                      child: Text(
+                        "Lihat Semua",
+                        style: TextStylesConstant.nunitoCaption16
+                            .copyWith(color: ColorsConstant.neutral600),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Get.to(() => AdminShowSchedule());
-                        },
-                        child: Text(
-                          "Lihat Semua",
-                          style: TextStylesConstant.nunitoCaption16
-                              .copyWith(color: ColorsConstant.neutral600),
+                    ),
+                  ],
+                ),
+                Obx(() {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: ColorsConstant.neutral50,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: ColorsConstant.neutral200,
+                          blurRadius: 10,
+                          offset: Offset(0, 2),
                         ),
-                      )
-                    ]),
-                Container(
-                  decoration: BoxDecoration(
-                    color: ColorsConstant.neutral50,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: ColorsConstant.neutral200,
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: DatePicker(
-                    locale: 'id',
-                    DateTime.now().subtract(const Duration(days: 2)),
-                    monthTextStyle: TextStylesConstant.nunitoFooterBold,
-                    dateTextStyle: TextStylesConstant.nunitoHeading16
-                        .copyWith(fontWeight: FontWeight.bold),
-                    dayTextStyle: TextStylesConstant.nunitoFooterBold,
-                    initialSelectedDate: DateTime.now(),
-                    selectionColor: ColorsConstant.secondary300,
-                    selectedTextColor: ColorsConstant.white,
-                    daysCount: 6,
-                    onDateChange: (date) {
-                      setState(() {
-                        selectedDate = date;
-                        scheduleController.fetchScheduleForAdmin(selectedDate);
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
+                      ],
+                    ),
+                    child: DatePicker(
+                      locale: 'id',
+                      DateTime.now().subtract(const Duration(days: 2)),
+                      monthTextStyle: TextStylesConstant.nunitoFooterBold,
+                      dateTextStyle: TextStylesConstant.nunitoHeading16
+                          .copyWith(fontWeight: FontWeight.bold),
+                      dayTextStyle: TextStylesConstant.nunitoFooterBold,
+                      initialSelectedDate: selectedDate.value,
+                      selectionColor: ColorsConstant.secondary300,
+                      selectedTextColor: ColorsConstant.white,
+                      daysCount: 6,
+                      onDateChange: (date) {
+                        selectedDate.value = date;
+                        scheduleController.fetchScheduleForAdmin(date);
+                      },
+                    ),
+                  );
+                }),
+                const SizedBox(height: 24),
                 Obx(() {
                   if (scheduleController.isLoading.value) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
                   if (scheduleController.schedules.isEmpty) {
-                    return Center(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            IconsConstant.noSchedule,
-                            width: 150,
-                            height: 150,
-                            fit: BoxFit.cover,
-                          ),
-                          Text(
-                            'Tidak ada jadwal untuk hari ini.',
-                            style: TextStylesConstant.nunitoCaption16,
-                          ),
+                    return Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: ColorsConstant.neutral50,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(
+                              color: ColorsConstant.neutral300, blurRadius: 20),
                         ],
+                      ),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              IconsConstant.noSchedule,
+                              width: 150,
+                              height: 150,
+                              fit: BoxFit.cover,
+                            ),
+                            Text(
+                              'Tidak ada jadwal untuk hari ini.',
+                              style: TextStylesConstant.nunitoCaption16,
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   }
 
                   return GestureDetector(
-                      child: AdminScheduleCardWidget(),
-                      onTap: () {
-                        final selectedSchedule =
-                            scheduleController.schedules.firstWhere(
-                          (schedule) =>
-                              schedule['date'] ==
-                              selectedDate.toIso8601String(),
-                          orElse: () => {},
-                        );
-                        if (selectedSchedule != null) {
-                          Get.to(
-                            () => InputScheduleScreen(
-                              scheduleData:
-                                  selectedSchedule, // Kirim data jadwal yang dipilih
-                              isEditMode: true, // Tandai mode edit
-                            ),
-                          );
-                        }
-                      });
+                    child: AdminScheduleCardWidget(),
+                    onTap: () {
+                      final selectedSchedule = scheduleController.schedules
+                          .firstWhere(
+                              (schedule) =>
+                                  schedule['date'] ==
+                                  selectedDate.value.toIso8601String(),
+                              orElse: () => {});
+                      Get.to(() => InputScheduleScreen(
+                            scheduleData: selectedSchedule,
+                            isEditMode: true,
+                          ));
+                    },
+                  );
                 }),
               ],
             ),
@@ -182,9 +169,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: ColorsConstant.secondary300,
-        onPressed: () {
-          Get.to(() => InputScheduleScreen());
-        },
+        onPressed: () => Get.to(() => const InputScheduleScreen()),
         child: const Icon(
           Icons.add,
           color: ColorsConstant.white,

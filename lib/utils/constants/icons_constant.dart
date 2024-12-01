@@ -1,6 +1,7 @@
 class IconsConstant {
   static const String _basePath = 'assets/images/';
 
+  //Icon
   static const String person = '${_basePath}person.svg';
   static const String lock = '${_basePath}lock.svg';
   static const String show = '${_basePath}show.svg';
@@ -31,5 +32,8 @@ class IconsConstant {
   static const String logout = '${_basePath}logout.svg';
   static const String layanan = '${_basePath}message_question.svg';
   static const String profilEducode = '${_basePath}tag_user.svg';
-  static const String arrow_circle_right = '${_basePath}arrow_circle_right.svg';
+  static const String arrowCircleRight = '${_basePath}arrow_circle_right.svg';
+
+  //Image
+  static const String educodeLogo = '${_basePath}logo_educode.png';
 }

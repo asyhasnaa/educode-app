@@ -1,7 +1,7 @@
 import 'package:educode/models/api_response/course_response.dart';
 import 'package:educode/services/api_course.dart';
 import 'package:educode/view_model/authentication/login_controller.dart';
-import 'package:educode/view_model/home/home_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class CourseController extends GetxController {
@@ -32,22 +32,30 @@ class CourseController extends GetxController {
   Future<void> fetchUserCourse(int userId) async {
     isLoading.value = true;
 
-    print(
-        "==========Fetching courses for User ID: $userId (Type: ${userId.runtimeType})");
+    if (kDebugMode) {
+      print(
+          "==========Fetching courses for User ID: $userId (Type: ${userId.runtimeType})");
+    }
 
     try {
       final userCourse = await apiCourseService.getCourse(userId);
 
       if (userCourse != null) {
         course.assignAll(userCourse);
-        print("========Courses fetched: ${userCourse.length} courses");
-        print("========Courses fetched: ${userCourse} courses");
+        if (kDebugMode) {
+          print("========Courses fetched: ${userCourse.length} courses");
+        }
+        if (kDebugMode) {
+          print("========Courses fetched: $userCourse courses");
+        }
       } else {
         course.clear();
         Get.snackbar('Error', 'Failed to fetch user course');
       }
     } catch (e) {
-      print("Error ambil course: $e");
+      if (kDebugMode) {
+        print("Error ambil course: $e");
+      }
     } finally {
       isLoading.value = false;
     }
@@ -68,12 +76,18 @@ class CourseController extends GetxController {
 
       if (names.isNotEmpty) {
         courseNames.assignAll(names);
-        print("Nama kursus berhasil diambil: ${courseNames.length} kursus");
+        if (kDebugMode) {
+          print("Nama kursus berhasil diambil: ${courseNames.length} kursus");
+        }
       } else {
-        print("Tidak ada nama kursus yang ditemukan.");
+        if (kDebugMode) {
+          print("Tidak ada nama kursus yang ditemukan.");
+        }
       }
     } catch (e) {
-      print("Gagal memuat nama kursus: $e");
+      if (kDebugMode) {
+        print("Gagal memuat nama kursus: $e");
+      }
     } finally {
       isLoading.value = false;
     }

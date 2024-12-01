@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:educode/utils/constants/color_constant.dart';
-import 'package:educode/utils/constants/icons..dart';
+import 'package:educode/utils/constants/icons_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view_model/schedule/schedule_controller.dart';
 import 'package:flutter/material.dart';

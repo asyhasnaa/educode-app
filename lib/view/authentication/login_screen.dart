@@ -1,7 +1,7 @@
 import 'package:educode/global_widgets/global_form_button_widget.dart';
 import 'package:educode/global_widgets/global_text_field_widget.dart';
 import 'package:educode/utils/constants/color_constant.dart';
-import 'package:educode/utils/constants/icons..dart';
+import 'package:educode/utils/constants/icons_constant.dart';
 
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view_model/authentication/login_controller.dart';
@@ -26,7 +26,7 @@ class LoginScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
                   child: Center(
                       child: Image.asset(
-                    "assets/images/onboarding1.png",
+                    IconsConstant.onboarding1,
                     width: 250,
                   )),
                 ),
@@ -107,17 +107,24 @@ class LoginScreen extends StatelessWidget {
                                       .copyWith(
                                           color: ColorsConstant.neutral500),
                                 ),
-                                icon: const Icon(Icons.arrow_drop_down,
-                                    color: ColorsConstant.neutral400),
+                                icon: const Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Icon(Icons.keyboard_arrow_down,
+                                      color: ColorsConstant.neutral400),
+                                ),
                                 items: <String>[
                                   'Admin',
                                   'Orangtua',
                                 ].map((String value) {
                                   return DropdownMenuItem(
                                     value: value,
-                                    child: Text(
-                                      value,
-                                      style: TextStylesConstant.nunitoCaption16,
+                                    child: SizedBox(
+                                      width: 320,
+                                      child: Text(
+                                        value,
+                                        style:
+                                            TextStylesConstant.nunitoCaption16,
+                                      ),
                                     ),
                                   );
                                 }).toList(),

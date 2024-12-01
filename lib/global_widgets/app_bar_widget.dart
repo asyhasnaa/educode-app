@@ -1,10 +1,11 @@
 // SliverChildAppBarWidget
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:educode/utils/constants/color_constant.dart';
-import 'package:educode/utils/constants/icons..dart';
+import 'package:educode/utils/constants/icons_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view_model/course/course_controller.dart';
 import 'package:educode/view_model/authentication/login_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -109,7 +110,9 @@ class SliverChildAppBarWidget extends StatelessWidget {
                                 },
                                 selectedItem: children.first['name'] as String,
                                 onChanged: (selectedName) {
-                                  print("Selected name: $selectedName");
+                                  if (kDebugMode) {
+                                    print("Selected name: $selectedName");
+                                  }
                                   if (selectedName != null) {
                                     final selectedChild = children.firstWhere(
                                       (child) => child['name'] == selectedName,
@@ -120,7 +123,9 @@ class SliverChildAppBarWidget extends StatelessWidget {
                                       final childId =
                                           selectedChild['childId'] as int;
 
-                                      print("Selected childId: $childId");
+                                      if (kDebugMode) {
+                                        print("Selected childId: $childId");
+                                      }
 
                                       courseController
                                           .updateSelectedUserId(childId);

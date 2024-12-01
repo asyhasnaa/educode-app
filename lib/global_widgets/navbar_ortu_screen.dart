@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:educode/utils/constants/color_constant.dart';
-import 'package:educode/utils/constants/icons..dart';
+import 'package:educode/utils/constants/icons_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view/bill/screen/bill_screen.dart';
 import 'package:educode/view/report/grade_report_screen.dart';
@@ -21,7 +21,7 @@ class _NavBarOrtuScreenState extends State<NavBarOrtuScreen> {
   int _selectedIndex = 0;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    const HomeScreen(),
+    HomeScreen(),
     GradeReportScreen(),
     const InvoiceListPage(),
     const ProfileScreen(),

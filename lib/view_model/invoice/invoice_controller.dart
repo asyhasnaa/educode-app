@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class InvoiceController extends GetxController {
@@ -10,6 +11,7 @@ class InvoiceController extends GetxController {
       <Map<String, dynamic>>[].obs; // Tagihan yang difilter
   RxList<Map<String, dynamic>> filteredAdminInvoices =
       <Map<String, dynamic>>[].obs;
+  var selectedFilter = 'All'.obs;
 
   @override
   void onInit() {
@@ -34,14 +36,16 @@ class InvoiceController extends GetxController {
       allInvoices.value = querySnapshot.docs
           .map((doc) => {
                 'id': doc.id,
-                ...doc.data() as Map<String, dynamic>,
+                ...doc.data(),
               })
           .toList();
 
       // Set filteredInvoices ke allInvoices awalnya
       filteredInvoices.value = allInvoices;
     } catch (e) {
-      print("Error fetching invoices: $e");
+      if (kDebugMode) {
+        print("Error fetching invoices: $e");
+      }
     } finally {
       isLoading.value = false;
     }
@@ -62,7 +66,9 @@ class InvoiceController extends GetxController {
       // Default tampilkan semua invoice
       filteredAdminInvoices.value = allInvoices;
     } catch (e) {
-      print("Error fetching invoices: $e");
+      if (kDebugMode) {
+        print("Error fetching invoices: $e");
+      }
     } finally {
       isLoading.value = false;
     }
@@ -76,7 +82,9 @@ class InvoiceController extends GetxController {
           .doc(invoiceId)
           .delete();
     } catch (e) {
-      print("Error deleting invoice: $e");
+      if (kDebugMode) {
+        print("Error deleting invoice: $e");
+      }
     }
   }
 
@@ -116,7 +124,6 @@ class InvoiceController extends GetxController {
     return {'paid': paidCount, 'unpaid': unpaidCount, 'total': totalCount};
   }
 
-  //Metode untuk searchbar pada halaman admin
   // Metode untuk searchbar pada halaman admin
   void searchInvoices(String query) {
     if (query.isEmpty) {

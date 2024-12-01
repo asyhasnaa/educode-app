@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:educode/utils/constants/color_constant.dart';
-import 'package:educode/utils/constants/icons..dart';
+import 'package:educode/utils/constants/icons_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view/bill/screen/adm_list_bill_screen.dart';
-import 'package:educode/view/home/screen/adm_home_Screen.dart';
+import 'package:educode/view/home/screen/adm_home_screen.dart';
 import 'package:educode/view/profile/adm_profile_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class _NavBarAdminScreenState extends State<NavBarAdminScreen> {
   int _selectedIndex = 0;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    const AdminHomeScreen(),
+    AdminHomeScreen(),
     const AdminInvoiceListPage(),
     const AdminProfileScreen(),
   ];
@@ -34,11 +34,15 @@ class _NavBarAdminScreenState extends State<NavBarAdminScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
+        enableFeedback: true,
         selectedItemColor: ColorsConstant.primary300,
         showUnselectedLabels: true,
-        backgroundColor: ColorsConstant.white,
-        unselectedItemColor: ColorsConstant.primary300,
         selectedLabelStyle: TextStylesConstant.nunitoButtonBold,
+        unselectedLabelStyle: TextStylesConstant.nunitoButtonBold.copyWith(
+          color: ColorsConstant.neutral200,
+        ),
+        backgroundColor: ColorsConstant.neutral50,
+        unselectedItemColor: ColorsConstant.primary200,
         elevation: 0,
         items: [
           BottomNavigationBarItem(
@@ -48,7 +52,9 @@ class _NavBarAdminScreenState extends State<NavBarAdminScreen> {
                 _selectedIndex == 0
                     ? IconsConstant.homeNavOn
                     : IconsConstant.homeNavOff,
-                color: ColorsConstant.primary300,
+                color: _selectedIndex == 0
+                    ? ColorsConstant.primary300
+                    : ColorsConstant.primary200,
               ),
             ),
             label: 'Beranda',
@@ -60,7 +66,9 @@ class _NavBarAdminScreenState extends State<NavBarAdminScreen> {
                 _selectedIndex == 1
                     ? IconsConstant.billNavOn
                     : IconsConstant.billNavOff,
-                color: ColorsConstant.primary300,
+                color: _selectedIndex == 1
+                    ? ColorsConstant.primary300
+                    : ColorsConstant.primary200,
               ),
             ),
             label: 'Tagihan',
@@ -72,7 +80,9 @@ class _NavBarAdminScreenState extends State<NavBarAdminScreen> {
                 _selectedIndex == 2
                     ? IconsConstant.profileNavOn
                     : IconsConstant.profileNavOff,
-                color: ColorsConstant.primary300,
+                color: _selectedIndex == 2
+                    ? ColorsConstant.primary300
+                    : ColorsConstant.primary200,
               ),
             ),
             label: 'Profile',

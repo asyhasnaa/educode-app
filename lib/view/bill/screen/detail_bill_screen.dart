@@ -8,9 +8,15 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class DetailTagihanScreen extends StatelessWidget {
+  final String parent;
+  final String emailParent;
   final Map<String, dynamic> invoice;
 
-  const DetailTagihanScreen({super.key, required this.invoice});
+  const DetailTagihanScreen(
+      {super.key,
+      required this.invoice,
+      required this.parent,
+      required this.emailParent});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +54,7 @@ class DetailTagihanScreen extends StatelessWidget {
               'Invoice #${invoice['invoiceNumber']}',
               style: TextStylesConstant.nunitoHeading24,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             // Billing Info
             Container(
               padding: const EdgeInsets.all(16),
@@ -75,7 +81,7 @@ class DetailTagihanScreen extends StatelessWidget {
                         children: [
                           Text('Dari',
                               style: TextStylesConstant.nunitoExtraBoldTitle),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             'Education Code Purwokerto',
                             style: TextStylesConstant.nunitoCaption16.copyWith(
@@ -106,25 +112,25 @@ class DetailTagihanScreen extends StatelessWidget {
                   const Divider(height: 24, thickness: 1),
                   Row(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundColor: Colors.grey,
                         radius: 20,
                         child: Icon(Icons.person, color: Colors.white),
                       ),
-                      SizedBox(width: 12),
+                      const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${profileController.profile.value.fullname}",
+                            parent,
                             style: TextStylesConstant.nunitoHeading20
                                 .copyWith(color: ColorsConstant.black),
                             textAlign: TextAlign.start,
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
-                            "${profileController.profile.value.email}",
-                            style: TextStyle(color: Colors.grey),
+                            emailParent,
+                            style: const TextStyle(color: Colors.grey),
                           ),
                         ],
                       ),
@@ -137,18 +143,18 @@ class DetailTagihanScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Nama Anak',
+                          const Text('Nama Anak',
                               style: TextStyle(color: Colors.grey)),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(invoice['name']),
                         ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text('Tanggal Tagihan',
+                          const Text('Tanggal Tagihan',
                               style: TextStyle(color: Colors.grey)),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(formattedDate),
                         ],
                       ),
@@ -231,7 +237,7 @@ class DetailTagihanScreen extends StatelessWidget {
       border: TableBorder.symmetric(
         inside: BorderSide(color: Colors.grey.withOpacity(0.5), width: 0.5),
       ),
-      columnWidths: {
+      columnWidths: const {
         0: FixedColumnWidth(150), // Width for the course column
         1: FixedColumnWidth(100), // Width for the date column
         2: FixedColumnWidth(100), // Width for the price column
@@ -243,7 +249,7 @@ class DetailTagihanScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
                 course,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
                 textAlign: TextAlign.start,
               ),
             ),
@@ -251,7 +257,7 @@ class DetailTagihanScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
                 date,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -259,7 +265,7 @@ class DetailTagihanScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
                 price,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
                 textAlign: TextAlign.end,
               ),
             ),
@@ -278,7 +284,7 @@ class DetailTagihanScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        image: DecorationImage(
+        image: const DecorationImage(
           image: AssetImage('assets/images/bg_green.png'),
           fit: BoxFit.cover,
         ),

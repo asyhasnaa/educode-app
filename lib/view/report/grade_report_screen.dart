@@ -5,7 +5,7 @@ import 'package:educode/utils/constants/color_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view/report/widget/course_card_widget.dart';
 import 'package:educode/view_model/course/course_controller.dart';
-import 'package:educode/view_model/home/home_controller.dart';
+import 'package:educode/view_model/invoice/invoice_controller.dart';
 import 'package:educode/view_model/report/grade_item.dart';
 import 'package:educode/view_model/authentication/login_controller.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class GradeReportScreen extends StatelessWidget {
   final GradeReportController gradeReportController = Get.put(
     GradeReportController(ApiGradeReportService()),
   );
-  // final HomeController homeController = Get.put(HomeController());
+  final InvoiceController invoiceController = Get.put(InvoiceController());
   final LoginController loginController = Get.find();
 
   @override

@@ -1,22 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:educode/global_widgets/child_dropdown_widget.dart';
 import 'package:educode/services/api_profile_service.dart';
 import 'package:educode/utils/constants/color_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
+import 'package:educode/view/bill/screen/detail_bill_screen.dart';
 import 'package:educode/view/bill/widget/invoice_card_widget.dart';
 import 'package:educode/view_model/course/course_controller.dart';
-import 'package:educode/view_model/home/home_controller.dart';
 import 'package:educode/view_model/invoice/invoice_controller.dart';
 import 'package:educode/view_model/authentication/login_controller.dart';
 import 'package:educode/view_model/profile/profile_conroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class InvoiceListPage extends StatefulWidget {
   const InvoiceListPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _InvoiceListPageState createState() => _InvoiceListPageState();
 }
 
@@ -37,8 +36,7 @@ class _InvoiceListPageState extends State<InvoiceListPage>
     super.initState();
 
     // Fetch invoice data for the initially selected child
-    if (loginController.selectedUserId.value != null &&
-        loginController.children.isNotEmpty) {
+    if (loginController.children.isNotEmpty) {
       final initialChildName = loginController.children.firstWhere(
           (child) => child['childId'] == loginController.selectedUserId.value,
           orElse: () => {})['name'];
@@ -46,11 +44,6 @@ class _InvoiceListPageState extends State<InvoiceListPage>
         invoiceController.fetchInvoicesForChild(initialChildName);
       }
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -102,7 +95,7 @@ class _InvoiceListPageState extends State<InvoiceListPage>
                 'Ringkasan Tagihan',
                 style: TextStylesConstant.nunitoHeading16,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Obx(() {
                 final summary = invoiceController.getInvoiceSummary();
 
@@ -139,24 +132,24 @@ class _InvoiceListPageState extends State<InvoiceListPage>
                   const Spacer(),
                   DropdownButton<String>(
                     value: selectedFilter,
-                    items: [
+                    items: const [
                       DropdownMenuItem(
+                        value: 'All',
                         child: Text(
                           'Semua',
                         ),
-                        value: 'All',
                       ),
                       DropdownMenuItem(
+                        value: 'paid',
                         child: Text(
                           'Lunas',
                         ),
-                        value: 'paid',
                       ),
                       DropdownMenuItem(
+                        value: 'unpaid',
                         child: Text(
                           'Belum Bayar',
                         ),
-                        value: 'unpaid',
                       )
                     ],
                     onChanged: (String? value) {
@@ -189,8 +182,19 @@ class _InvoiceListPageState extends State<InvoiceListPage>
                   itemCount: invoiceController.filteredInvoices.length,
                   itemBuilder: (context, index) {
                     final invoice = invoiceController.filteredInvoices[index];
-                    return InvoiceCardWidget(
-                      invoice: invoice,
+                    return GestureDetector(
+                      child: InvoiceCardWidget(
+                        invoice: invoice,
+                      ),
+                      onTap: () {
+                        Get.to(() => DetailTagihanScreen(
+                              invoice: invoice,
+                              parent:
+                                  "${profileController.profile.value.fullname}",
+                              emailParent:
+                                  "${profileController.profile.value.email}",
+                            ));
+                      },
                     );
                   },
                 );

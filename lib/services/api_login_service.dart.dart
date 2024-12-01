@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:educode/models/api_response/login_response.dart';
 import 'package:educode/models/api_response/site_info_response.dart';
 import 'package:educode/routes/api_routes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,7 +22,9 @@ class ApiAuthService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print("Login response data: $data");
+      if (kDebugMode) {
+        print("Login response data: $data");
+      }
       if (data.containsKey('token')) {
         // Save the token
         String token = data['token'];
@@ -36,11 +39,15 @@ class ApiAuthService {
 
         return LoginResponse(token: token, privatetoken: privatetoken);
       } else {
-        print("Token not found in response");
+        if (kDebugMode) {
+          print("Token not found in response");
+        }
         return null;
       }
     } else {
-      print("Login failed with status code: ${response.statusCode}");
+      if (kDebugMode) {
+        print("Login failed with status code: ${response.statusCode}");
+      }
       return null;
     }
   }
@@ -57,7 +64,9 @@ class ApiAuthService {
 
     if (responseInfo.statusCode == 200) {
       final data = jsonDecode(responseInfo.body);
-      print("User info response data: $data");
+      if (kDebugMode) {
+        print("User info response data: $data");
+      }
 
       if (data.containsKey('userid')) {
         return SiteInfoResponse.fromJson(data);
@@ -74,7 +83,9 @@ class ApiAuthService {
   Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
-    print("Token disimpan ke Shared Preferences: $token");
+    if (kDebugMode) {
+      print("Token disimpan ke Shared Preferences: $token");
+    }
   }
 
 // Mendapatkan token dari shared preferences
@@ -82,9 +93,13 @@ class ApiAuthService {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
     if (token != null) {
-      print("Token diambil dari Shared Preferences: $token");
+      if (kDebugMode) {
+        print("Token diambil dari Shared Preferences: $token");
+      }
     } else {
-      print("Tidak ada token di Shared Preferences.");
+      if (kDebugMode) {
+        print("Tidak ada token di Shared Preferences.");
+      }
     }
     return token;
   }
@@ -93,7 +108,9 @@ class ApiAuthService {
   Future<void> saveUserId(int userId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('userId', userId);
-    print("UserID disimpan ke Shared Preferences: $userId");
+    if (kDebugMode) {
+      print("UserID disimpan ke Shared Preferences: $userId");
+    }
   }
 
   // Mendapatkan user ID dari shared preferences

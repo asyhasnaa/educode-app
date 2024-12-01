@@ -1,6 +1,6 @@
 import 'package:educode/global_widgets/global_button_widget.dart';
 import 'package:educode/utils/constants/color_constant.dart';
-import 'package:educode/utils/constants/icons..dart';
+import 'package:educode/utils/constants/icons_constant.dart';
 import 'package:educode/utils/constants/text_styles_constant.dart';
 import 'package:educode/view/course/detail_screen.dart';
 import 'package:educode/view_model/course/course_controller.dart';

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:educode/models/api_response/course_response.dart';
 import 'package:educode/routes/api_routes.dart';
 import 'package:educode/services/api_login_service.dart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class ApiCourseService {
@@ -30,9 +31,13 @@ class ApiCourseService {
     final ApiAuthService loginService = ApiAuthService();
 
     final token = await loginService.getToken();
-    print("ChildId selected = $selectedUserId");
+    if (kDebugMode) {
+      print("ChildId selected = $selectedUserId");
+    }
     if (token == null) {
-      print("ChildId is null");
+      if (kDebugMode) {
+        print("ChildId is null");
+      }
       return null;
     }
     final response = await http.get(Uri.parse(
@@ -41,7 +46,9 @@ class ApiCourseService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print("Debug: Response Course from API: $data");
+      if (kDebugMode) {
+        print("Debug: Response Course from API: $data");
+      }
       if (data is List) {
         return data
             .map((course) => CourseUserResponse.fromJson(course))

@@ -1,11 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class ScheduleController extends GetxController {
   //List Variable untuk menyimpan data jadwal
   var schedulesChild = <Map<String, dynamic>>[].obs;
   var schedules = <Map<String, dynamic>>[].obs;
+  var calendarFormat = CalendarFormat.month.obs;
+  var focusedDay = DateTime.now().obs;
+  var selectedDay = DateTime.now().obs;
   var isLoading = false.obs;
+
+  var selectedCategory = Rxn<String>();
+  var selectedCourse = Rxn<String>();
+  var addressController = TextEditingController();
+  var priceController = TextEditingController();
+  var dateController = TextEditingController();
+  var timeStartController = TextEditingController();
+  var timeEndController = TextEditingController();
 
   @override
   void onInit() {
@@ -32,14 +46,20 @@ class ScheduleController extends GetxController {
           .get();
 
       if (snapshot.docs.isNotEmpty) {
-        print("Jadwal ditemukan untuk hari ini.");
+        if (kDebugMode) {
+          print("Jadwal ditemukan untuk hari ini.");
+        }
         schedules.value = snapshot.docs.map((doc) => doc.data()).toList();
       } else {
-        print("Tidak ada jadwal untuk hari ini.");
+        if (kDebugMode) {
+          print("Tidak ada jadwal untuk hari ini.");
+        }
         schedules.clear();
       }
     } catch (e) {
-      print("Error fetching schedule: $e");
+      if (kDebugMode) {
+        print("Error fetching schedule: $e");
+      }
     } finally {
       isLoading.value = false;
     }
@@ -70,13 +90,24 @@ class ScheduleController extends GetxController {
     });
   }
 
+  void updateCalendarFormat(CalendarFormat format) {
+    calendarFormat.value = format;
+  }
+
+  void updateFocusedDay(DateTime focusedDayValue) {
+    focusedDay.value = focusedDayValue;
+  }
+
+  void updateSelectedDay(DateTime selectedDayValue) {
+    selectedDay.value = selectedDayValue;
+    fetchScheduleForAdmin(selectedDayValue);
+  }
+
   //Metode untuk menyimpan jadwal ke firebase
   Future<void> saveSchedule(Map<String, dynamic> scheduleData,
       {DateTime? selectedDate}) async {
     try {
-      if (selectedDate == null) {
-        selectedDate = DateTime.now();
-      }
+      selectedDate ??= DateTime.now();
 
       if (scheduleData['id'] == null) {
         await FirebaseFirestore.instance
