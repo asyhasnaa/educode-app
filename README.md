@@ -7,11 +7,11 @@ Star ⭐ the repository if you like what you see😉.
 
 ![Preview Application ](https://github.com/asyhasnaa/educode-app/blob/efc03fa2722a367967a961bff9ba324d395b3511/assets/images/preview%20app.png)
 
-## 🌿 About Educode
+## 🎓 About Educode
 
 Welcome to Educode, where monitoring student performance becomes seamless! 🎓 Educode is not just another educational app; it's your key to staying connected with your child’s academic journey. We understand three common challenges parents face: lack of access to real-time updates, difficulty in tracking progress, and limited insights into their child’s education. To address these issues, we’ve designed EduCode with a range of powerful and user-friendly features.
 
-## 🌿 Educode Features
+## 🏆 Educode Features
 
 ### 📝 Login Account
 
