@@ -5,7 +5,7 @@ This project belong to capstone project on
 
 Star ⭐ the repository if you like what you see😉.
 
-![Preview Application ]([https://github.com/asyhasnaa/educode-app/blob/efc03fa2722a367967a961bff9ba324d395b3511/assets/images/preview%20app.png])
+![Preview Application ](https://github.com/asyhasnaa/educode-app/blob/efc03fa2722a367967a961bff9ba324d395b3511/assets/images/preview%20app.png)
 
 ## 🌿 About Educode
 
