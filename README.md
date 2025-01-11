@@ -5,7 +5,7 @@ This project belong to capstone project on
 
 Star ⭐ the repository if you like what you see😉.
 
-![Preview Application ]([https://github.com/Alterra-Greeve/flutter-capstone/assets/70643310/2b31811a-1df5-4efc-be01-0c67ae31c782](https://github.com/asyhasnaa/educode-app/blob/efc03fa2722a367967a961bff9ba324d395b3511/assets/images/preview%20app.png])
+![Preview Application ]([https://github.com/asyhasnaa/educode-app/blob/efc03fa2722a367967a961bff9ba324d395b3511/assets/images/preview%20app.png])
 
 ## 🌿 About Educode
 
